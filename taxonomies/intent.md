@@ -4,12 +4,20 @@
 **optional**: entity (player, team, referee), filters (season, w/wo referee, home/away)
 **output**: single value or small fixed set of data
 **planner template**: resolve entity -> apply filters -> compute metric
-**examples**: "scott foster fouls per game this season", "lakers free throw differential with Tony Brothers"
+**examples**: "how many fouls did scott foster call ", "how many games has Tony Brothers refereed"
+
+## intent: aggregation
+**description**: calculate summary stats for an entity
+**required**: metric, entity
+**optional**: filters
+**output**: aggregated metric value for specified entity
+**planner template**: filter by entity -> apply filter(s) -> aggregate metric
+**examples**: "scott fosters average fouls per game", "lakers free throw differential with Tony Brothers"
 
 ## intent: leaderboard
 **description**: rank a set of entities by a metric under filters if used
-**required**: metric
-**optional**: entity, filters, ranking (top X, bottom X)
+**required**: metric, entity
+**optional**: filters, ranking (top X, bottom X)
 **output**: ordered list of entities with metric values
 **planner template**: group by entity -> aggregate metric -> apply filters -> sort -> limit
 **examples**: "which refs call the most fouls on the Heat?", "top 5 refs by home point differential"
@@ -36,4 +44,3 @@
 **optional**: entity, (extra) filters
 **output**: list of entities meeting criteria
 **planner template**: group by entity -> aggregate metric -> apply filters/constraints
-
