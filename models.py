@@ -22,7 +22,7 @@ class HomeAway(Enum):
 @dataclass
 class Entity:
     entity_type: str
-    entity_id: int
+    entity_id: int | str
     name: str
 
     def __repr__(self):
@@ -48,9 +48,9 @@ class Comparison:
 class QuerySpec:
     intent: Intent
     entities: Dict[str, Optional[Entity]] = field(default_factory=lambda: {
-        "referee": None,
-        "team": None,
-        "player": None
+        "referee": [],
+        "team": [],
+        "player": []
     })
     metrics: List[str] = field(default_factory=list)
     filters: Filters = field(default_factory=Filters)
