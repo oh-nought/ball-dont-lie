@@ -1,5 +1,5 @@
 import pandas as pd
-from nba_api.stats.endpoints import boxscoresummaryv3, leaguegamelog, boxscoretraditionalv3, playerindex, commonallplayers
+from nba_api.stats.endpoints import boxscoresummaryv3, leaguegamelog, boxscoretraditionalv3, playerindex, commonallplayers, boxscoremiscv3
 from nba_api.stats.static import players
 
 class NBADataManager:
@@ -12,12 +12,12 @@ class NBADataManager:
         # nba.com's teams.get_teams() doesn't give historical teams so we improvise
         # get list of current + historical players, return unique list of teams
         player_df = playerindex.PlayerIndex(historical_nullable=1).get_data_frames()[0]
-        player_df = player_df[['TEAM_ID', 'TEAM_NAME', 'TEAM_ABBREVIATION']]
+        player_df = player_df[['TEAM_ID', 'TEAM_NAME', 'TEAM_CITY', 'TEAM_ABBREVIATION']]
         teams = player_df.values.tolist()
         teams = set(tuple(team) for team in teams)
         team_df = pd.DataFrame(teams)
-        team_df.columns = ['TEAM_ID', 'TEAM_NAME', 'TEAM_ABBREVIATION']
-        team_df.loc[len(team_df)] = [0, 'No Team', 'N/A']
+        team_df.columns = ['TEAM_ID', 'TEAM_NAME', 'TEAM_CITY', 'TEAM_ABBREVIATION']
+        team_df.loc[len(team_df)] = [0, 'No Team', 'N/A', 'N/A']
         
         return team_df
 
@@ -80,9 +80,12 @@ class NBADataManager:
         ra_df = ra_df[['gameId', 'personId']]
         ra_df = ra_df.rename(columns={'gameId': 'GAME_ID', 'personId': 'OFFICIAL_CODE'})
 
-        statline_df = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id).get_data_frames()[0]
-        statline_df = statline_df[['gameId', 'teamId', 'personId', 'minutes', 'fieldGoalsMade', 'fieldGoalsAttempted', 'freeThrowsMade', 'freeThrowsAttempted', 'reboundsOffensive', 'reboundsDefensive', 'assists', 'steals', 'blocks', 'turnovers', 'foulsPersonal', 'points', 'plusMinusPoints']]
-        statline_df = statline_df.rename(columns={'gameId': 'GAME_ID', 'teamId': 'TEAM_ID', 'personId': 'PLAYER_ID', 'fieldGoalsMade': 'FG_MADE', 'fieldGoalsAttempted': 'FG_ATTEMPTED', 'freeThrowsMade': 'FT_MADE', 'freeThrowsAttempted': 'FT_ATTEMPTED', 'reboundsOffensive': 'O_REB', 'reboundsDefensive': 'D_REB', 'foulsPersonal': 'FOULS', 'plusMinusPoints': 'PLUS_MINUS'})
+        trad_box_score = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id).get_data_frames()[0]
+        misc_box_score = boxscoremiscv3.BoxScoreMiscV3(game_id=game_id).get_data_frames()[0]
+        columns_needed = misc_box_score[['personId', 'foulsDrawn']]
+        statline_df = pd.DataFrame.merge(trad_box_score, columns_needed, on=['personId'])
+        statline_df = statline_df[['gameId', 'teamId', 'personId', 'minutes', 'fieldGoalsMade', 'fieldGoalsAttempted', 'freeThrowsMade', 'freeThrowsAttempted', 'reboundsOffensive', 'reboundsDefensive', 'assists', 'steals', 'blocks', 'turnovers', 'foulsPersonal', 'points', 'plusMinusPoints', 'foulsDrawn']]
+        statline_df = statline_df.rename(columns={'gameId': 'GAME_ID', 'teamId': 'TEAM_ID', 'personId': 'PLAYER_ID', 'fieldGoalsMade': 'FG_MADE', 'fieldGoalsAttempted': 'FG_ATTEMPTED', 'freeThrowsMade': 'FT_MADE', 'freeThrowsAttempted': 'FT_ATTEMPTED', 'reboundsOffensive': 'O_REB', 'reboundsDefensive': 'D_REB', 'foulsPersonal': 'FOULS', 'plusMinusPoints': 'PLUS_MINUS', 'foulsDrawn': 'FOULS_DRAWN'})
 
         return referee_df, ra_df, statline_df
 
