@@ -24,7 +24,7 @@ class Database:
 
     def create_tables(self):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS referees(official_code VARCHAR(20) PRIMARY KEY, name VARCHAR(100) NOT NULL, UNIQUE(name));")
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS teams(team_id INTEGER PRIMARY KEY, team_name VARCHAR(100) NOT NULL, team_abbreviation VARCHAR(10) NOT NULL);")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS teams(team_id INTEGER PRIMARY KEY, team_name VARCHAR(100) NOT NULL, team_city VARCHAR(100) NOT NULL, team_abbreviation VARCHAR(10) NOT NULL);")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS players(player_id INTEGER PRIMARY KEY, first_name VARCHAR(100), last_name VARCHAR(100), team_id INTEGER REFERENCES teams(team_id));")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS games(game_id VARCHAR(20) PRIMARY KEY, game_date DATE, season_id VARCHAR(10), season_type VARCHAR(20), home_team_id INTEGER REFERENCES teams(team_id), away_team_id INTEGER REFERENCES teams(team_id), home_score INTEGER, away_score INTEGER, home_fouls INTEGER, away_fouls INTEGER);")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS stat_lines(game_id VARCHAR(20) REFERENCES games(game_id), team_id INTEGER REFERENCES teams(team_id), player_id INTEGER REFERENCES players(player_id), minutes VARCHAR(10), fg_made INTEGER, fg_attempted INTEGER, ft_made INTEGER, ft_attempted INTEGER, o_reb INTEGER, d_reb INTEGER, assists INTEGER, steals INTEGER, blocks INTEGER, turnovers INTEGER, fouls INTEGER, points INTEGER, plus_minus INTEGER, fouls_drawn INTEGER, PRIMARY KEY(game_id, player_id));")
@@ -46,6 +46,3 @@ class Database:
         
     def drop_all_tables(self):
         self.cursor.execute("DROP TABLE IF EXISTS referee_assignments, stat_lines, games, players, teams, referees;")
-
-test = Database() 
-test.create_tables()
