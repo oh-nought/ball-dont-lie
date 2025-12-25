@@ -1,6 +1,7 @@
-__pycache__/
-
 .env
 
+__pycache__/
 
+data/
 testing/testing.py
+testing/parse.py
