@@ -1,7 +1,8 @@
+.venv/
 .env
 
-__pycache__/
-
-data/
-testing/testing.py
-testing/parse.py
+src/__pycache__/
+src/testing/parse.py
+src/testing/testing.py
+training/data/
+training/train_intent_classifier.py
