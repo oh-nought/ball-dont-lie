@@ -6,3 +6,4 @@ src/testing/parse.py
 src/testing/testing.py
 training/data/
 training/train_intent_classifier.py
+models/intent_classifier/

@@ -1,7 +1,7 @@
-from transformation import NBADataManager
-from database import Database
+from src.pipeline.transformation import NBADataManager
+from src.execution.database import Database
 from datetime import datetime
-from settings import *
+from src.settings import *
 from psycopg2.errors import ForeignKeyViolation
 import pandas as pd
 import time

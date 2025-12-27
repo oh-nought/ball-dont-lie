@@ -1,9 +1,9 @@
 from airflow.sdk import dag, task
 from airflow.exceptions import AirflowSkipException
 from datetime import datetime
-from database import Database
-from transformation import NBADataManager
-from settings import SEASONS
+from src.execution.database import Database
+from src.pipeline.transformation import NBADataManager
+from src.settings import SEASONS
 from random import random, randint
 import time
 
