@@ -3,7 +3,7 @@
 
 __pycache__
 
-src/testing/*
+src/testing/
 training/data/
 training/train_intent_classifier.py
 models/intent_classifier
