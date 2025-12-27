@@ -1,7 +1,8 @@
 .venv/
 .env
 
-src/__pycache__/
+__pycache__
+
 src/testing/parse.py
 src/testing/testing.py
 training/data/
