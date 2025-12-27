@@ -47,10 +47,10 @@ class Comparison:
 @dataclass
 class QuerySpec:
     intent: Intent
-    entities: Dict[str, Optional[Entity]] = field(default_factory=lambda: {
-        "referee": [],
-        "team": [],
-        "player": []
+    entities: Dict[str, List[Entity]] = field(default_factory=lambda: {
+        "referees": [],
+        "teams": [],
+        "players": []
     })
     metrics: List[str] = field(default_factory=list)
     filters: Filters = field(default_factory=Filters)

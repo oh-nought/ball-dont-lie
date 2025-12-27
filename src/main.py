@@ -1,5 +1,4 @@
 from bdl.settings import *
-from bdl.storage import Storage
 from transformation import NBADataManager
 
 def main():

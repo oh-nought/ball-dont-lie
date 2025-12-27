@@ -1,6 +1,6 @@
 import psycopg2
 import os
-from settings import *
+from src.settings import *
 from psycopg2 import extras
 from dotenv import load_dotenv
 

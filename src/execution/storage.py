@@ -1,10 +1,9 @@
-import json
 from boto3.session import Session
 
 class Storage:
-    def __init__(self, s3_bucket, profile_name):
+    def __init__(self, s3_bucket):
         self.s3_bucket = s3_bucket
-        self.session = Session(profile_name=profile_name)
+        self.session = Session(profile_name="default")
         self.s3 = self.session.resource('s3')
         self.s3_client = self.session.client('s3')
 
